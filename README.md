@@ -63,8 +63,6 @@ apj_formatter.save_apj(fig_apj, "scatter_apj.pdf")
   - Seamlessly enables LaTeX rendering (`use_tex=True`) when LaTeX and font packages are available.
 - **Non-Destructive Context Manager**:
   - Scoped styling via `with apj_formatter.style():` without polluting global matplotlib session state.
-- **100% Backward Compatible**:
-  - Drop-in replacement for existing scripts using `from apj_formatter import formatter` and `formatter.figure(...)`.
 
 ---
 
@@ -93,7 +91,7 @@ uv pip install -e .
 
 ## Quick Start
 
-### 1. Single-Column Figure (Standard)
+### 1. Single-Column Subplots
 ```python
 import apj_formatter
 import numpy as np
@@ -150,28 +148,25 @@ with apj_formatter.style(columns=1, aspect_ratio=0.6) as (width, height):
     fig.savefig("scoped_figure.pdf", bbox_inches="tight")
 ```
 
-### 4. Legacy Drop-in Compatibility
-Existing scripts using `formatter.figure(...)` continue to work without code changes:
+### 4. Direct Figure Object
 ```python
-from apj_formatter import formatter
+import apj_formatter
 
-# Single-column
-fig = formatter.figure(wide=False, aspect_ratio=1.0)
-
-# Double-column
-fig = formatter.figure(wide=True, aspect_ratio=0.5, width_ratio=0.8)
+# Single-column (3.5") or double-column (wide=True / columns=2)
+fig = apj_formatter.figure(columns=1, aspect_ratio=0.75)
+ax = fig.add_subplot(111)
+ax.plot([1, 2, 3], [4, 5, 6])
 ```
 
 ---
 
 ## API Reference
 
+- `apj_formatter.subplots(nrows=1, ncols=1, columns=1, wide=False, aspect_ratio=0.6, width_ratio=1.0, use_tex=False, **kwargs)`: Returns `(fig, ax)` configured with journal geometry and styles.
 - `apj_formatter.figure(columns=1, wide=False, aspect_ratio=0.6, width_ratio=1.0, use_tex=False, **kwargs)`: Returns a styled `matplotlib.figure.Figure`.
-- `apj_formatter.subplots(nrows=1, ncols=1, columns=1, wide=False, aspect_ratio=0.6, ...)`: Returns `(fig, ax)`.
-- `apj_formatter.set_style(columns=1, aspect_ratio=0.6, ...)`: Sets global `rcParams`.
 - `apj_formatter.style(columns=1, aspect_ratio=0.6, ...)`: Context manager for scoped styling.
+- `apj_formatter.set_style(columns=1, aspect_ratio=0.6, ...)`: Sets global `rcParams`.
 - `apj_formatter.save_apj(fig, filename, dpi=300, ...)`: Saves vector PDF or high-resolution PNG with AAS publication settings.
-- `apj_formatter.formatter.figure(...)`: Legacy `_Formatter` interface.
 
 ---
 

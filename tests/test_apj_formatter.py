@@ -15,7 +15,6 @@ from apj_formatter import (
     SINGLE_COL_WIDTH,
     _set_apj_style,
     figure,
-    formatter,
     get_apj_rcparams,
     get_figure_dimensions,
     save_apj,
@@ -54,27 +53,15 @@ class TestApjFormatter(unittest.TestCase):
         self.assertEqual(rc["font.family"], "serif")
         self.assertIn("Times New Roman", rc["font.serif"])
 
-    def test_backward_compatibility_formatter(self):
-        # Test exact MAUVE syntax
-        fig1 = formatter.figure(wide=False, aspect_ratio=1.0)
-        self.assertIsInstance(fig1, plt.Figure)
-        self.assertAlmostEqual(fig1.get_figwidth(), SINGLE_COL_WIDTH)
-        self.assertAlmostEqual(fig1.get_figheight(), SINGLE_COL_WIDTH)
-        plt.close(fig1)
-
-        fig2 = formatter.figure(wide=True, aspect_ratio=0.5, width_ratio=0.8)
-        self.assertIsInstance(fig2, plt.Figure)
-        self.assertAlmostEqual(fig2.get_figwidth(), DOUBLE_COL_WIDTH * 0.8)
-        self.assertAlmostEqual(fig2.get_figheight(), DOUBLE_COL_WIDTH * 0.8 * 0.5)
-        plt.close(fig2)
-
     def test_convenience_functions(self):
         fig = figure(columns=1, aspect_ratio=0.7)
         self.assertIsInstance(fig, plt.Figure)
+        self.assertAlmostEqual(fig.get_figwidth(), SINGLE_COL_WIDTH)
         plt.close(fig)
 
         fig, ax = subplots(1, 2, wide=True, aspect_ratio=0.4)
         self.assertIsInstance(fig, plt.Figure)
+        self.assertAlmostEqual(fig.get_figwidth(), DOUBLE_COL_WIDTH)
         self.assertEqual(len(ax), 2)
         plt.close(fig)
 

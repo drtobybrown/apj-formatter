@@ -63,7 +63,6 @@ def is_latex_available() -> bool:
 def _smoke_test_latex() -> None:
     """
     Smoke test LaTeX availability; raises RuntimeError if unavailable.
-    Retained for backward compatibility with legacy scripts.
     """
     if not is_latex_available():
         raise RuntimeError(
@@ -426,33 +425,3 @@ def save_apj(
         pad_inches=pad_inches,
         **kwargs,
     )
-
-
-class _Formatter:
-    """
-    Lightweight drop-in replacement for rsmf.formatter with 100% backward compatibility.
-    """
-
-    def figure(
-        self,
-        *,
-        wide: bool = False,
-        columns: int | None = None,
-        aspect_ratio: float = DEFAULT_ASPECT,
-        width_ratio: float = 1.0,
-        use_tex: bool = False,
-        **kwargs: Any,
-    ) -> plt.Figure:
-        if columns is None:
-            columns = 2 if wide else 1
-        width, height = _set_apj_style(
-            columns,
-            aspect_ratio=aspect_ratio,
-            width_ratio=width_ratio,
-            use_tex=use_tex,
-        )
-        return plt.figure(figsize=(width, height), **kwargs)
-
-
-# Instantiate global formatter for backward compatibility with existing MAUVE scripts
-formatter = _Formatter()
