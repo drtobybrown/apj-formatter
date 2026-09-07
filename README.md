@@ -19,21 +19,22 @@ import matplotlib.pyplot as plt
 import apj_formatter
 
 x = np.random.normal(10.0, 0.5, 100)
-y = 1.1 * x - 1.0 + np.random.normal(0, 0.25, 100)
+# Physical SFMS relation: ~0.5 dex at 10^10 M_sun
+y = 1.1 * x - 10.5 + np.random.normal(0, 0.25, 100)
 
 # --- Default Matplotlib ---
 fig_def, ax_def = plt.subplots(figsize=(3.5, 2.6))
 ax_def.scatter(x, y, alpha=0.7)
 ax_def.set_title("Default Matplotlib")
 ax_def.set_xlabel(r"Stellar Mass $\log(M_\ast / M_\odot)$")
-ax_def.set_ylabel(r"Star Formation Rate $\log(\mathrm{SFR})$")
+ax_def.set_ylabel(r"Star Formation Rate $\log(\mathrm{SFR}\ [M_\odot\ \mathrm{yr}^{-1}])$")
 
 # --- With apj-formatter ---
 fig_apj, ax_apj = apj_formatter.subplots(1, 1, columns=1, aspect_ratio=2.6/3.5)
 ax_apj.scatter(x, y, color="black", s=15, alpha=0.75)
 ax_apj.set_title("With apj-formatter")
 ax_apj.set_xlabel(r"Stellar Mass $\log(M_\ast / M_\odot)$")
-ax_apj.set_ylabel(r"Star Formation Rate $\log(\mathrm{SFR})$")
+ax_apj.set_ylabel(r"Star Formation Rate $\log(\mathrm{SFR}\ [M_\odot\ \mathrm{yr}^{-1}])$")
 apj_formatter.save_apj(fig_apj, "scatter_apj.pdf")
 ```
 
