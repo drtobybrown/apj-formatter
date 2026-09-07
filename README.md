@@ -9,6 +9,43 @@ Publication-ready `matplotlib` styling and formatting targeted for the **Astroph
 
 ---
 
+## Comparison: Default Matplotlib vs. apj-formatter
+
+![Comparison of Default Matplotlib vs apj-formatter](comparison.png)
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+import apj_formatter
+
+x = np.random.normal(10.0, 0.5, 100)
+y = 1.1 * x - 1.0 + np.random.normal(0, 0.25, 100)
+
+# --- Default Matplotlib ---
+fig_def, ax_def = plt.subplots(figsize=(3.5, 2.6))
+ax_def.scatter(x, y, alpha=0.7)
+ax_def.set_title("Default Matplotlib")
+ax_def.set_xlabel(r"Stellar Mass $\log(M_\ast / M_\odot)$")
+ax_def.set_ylabel(r"Star Formation Rate $\log(\mathrm{SFR})$")
+
+# --- With apj-formatter ---
+fig_apj, ax_apj = apj_formatter.subplots(1, 1, columns=1, aspect_ratio=2.6/3.5)
+ax_apj.scatter(x, y, color="black", s=15, alpha=0.75)
+ax_apj.set_title("With apj-formatter")
+ax_apj.set_xlabel(r"Stellar Mass $\log(M_\ast / M_\odot)$")
+ax_apj.set_ylabel(r"Star Formation Rate $\log(\mathrm{SFR})$")
+apj_formatter.save_apj(fig_apj, "scatter_apj.pdf")
+```
+
+| Feature | Default Matplotlib | With `apj-formatter` |
+| :--- | :--- | :--- |
+| **Spine & Ticks** | 2 axes only, outward ticks, no minor ticks | All 4 axes, inward ticks, minor ticks enabled |
+| **Typography** | Sans-serif, default mathtext | Times serif font stack, STIX mathtext / TeX |
+| **Dimensions** | 6.4" × 4.8" default canvas | Exact 3.5" (1-col) or 7.1" (2-col) journal width |
+| **Font Embedding** | Type 3 rasterized fonts possible | Type 42 TrueType embedded (passes AAS / arXiv checks) |
+
+---
+
 ## Features
 
 - **Accurate Journal Geometry**:
@@ -27,7 +64,7 @@ Publication-ready `matplotlib` styling and formatting targeted for the **Astroph
 - **Non-Destructive Context Manager**:
   - Scoped styling via `with apj_formatter.style():` without polluting global matplotlib session state.
 - **100% Backward Compatible**:
-  - Drop-in replacement for existing MAUVE scripts using `from apj_formatter import formatter` and `formatter.figure(...)`.
+  - Drop-in replacement for existing scripts using `from apj_formatter import formatter` and `formatter.figure(...)`.
 
 ---
 
@@ -113,8 +150,8 @@ with apj_formatter.style(columns=1, aspect_ratio=0.6) as (width, height):
     fig.savefig("scoped_figure.pdf", bbox_inches="tight")
 ```
 
-### 4. MAUVE Legacy Compatibility
-Existing MAUVE analysis pipelines and notebooks will continue to run without any code changes:
+### 4. Legacy Drop-in Compatibility
+Existing scripts using `formatter.figure(...)` continue to work without code changes:
 ```python
 from apj_formatter import formatter
 

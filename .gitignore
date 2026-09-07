@@ -48,5 +48,6 @@ htmlcov/
 
 # Output test artifacts
 *.png
+!comparison.png
 *.pdf
 *.eps
